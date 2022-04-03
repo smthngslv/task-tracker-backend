@@ -13,12 +13,17 @@ router = APIRouter(tags=['tasks', ], prefix='/tasks')
 
 
 @router.get('', status_code=status.HTTP_200_OK, response_model=TaskList)
-async def get(user: User = Depends(get_current_user)) -> TaskList:
+async def get_all(user: User = Depends(get_current_user)) -> TaskList:
     tasks = []
     for task in await user.task_factory.list:
         tasks.append(TaskScheme(id=str(task.id), **(await task.data).dict()))
 
     return TaskList(tasks=tasks)
+
+
+@router.get('/{task}', status_code=status.HTTP_200_OK, response_model=TaskScheme)
+async def get(task: Task = Depends(get_current_task)) -> TaskScheme:
+    return TaskScheme(id=str(task.id), **(await task.data).dict())
 
 
 @router.post('/new', status_code=status.HTTP_201_CREATED, response_model=TaskScheme)

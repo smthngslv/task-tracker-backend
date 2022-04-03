@@ -26,7 +26,7 @@ class UserData(BaseModel):
 
 class TaskData(BaseModel):
     name: constr(max_length=64)
-    tag: constr(regex=r'^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){1,18}[a-zA-Z0-9]$')
+    tag: Optional[list[constr(regex=r'^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){1,18}[a-zA-Z0-9]$')]]
     deadline: datetime
     description: Optional[constr(max_length=512)]
 
