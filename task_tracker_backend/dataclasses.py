@@ -34,7 +34,7 @@ class TaskStatus(str, Enum):
 
 class TaskData(BaseModel):
     name: constr(max_length=64)
-    tag: Optional[list[constr(regex=r'^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){1,18}[a-zA-Z0-9]$')]]
+    tags: Optional[list[constr(regex=r'^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){1,18}[a-zA-Z0-9]$')]]
     deadline: datetime
     description: Optional[constr(max_length=512)]
     hours_spent: int = 0
