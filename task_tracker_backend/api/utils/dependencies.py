@@ -7,7 +7,7 @@ from task_tracker_backend.api import jwt, factory
 from task_tracker_backend.api.schemas import APIAccessTokenPayload
 
 
-async def get_assess_token(credentials: HTTPAuthorizationCredentials = Security(HTTPBearer())) -> APIAccessTokenPayload:
+async def get_access_token(credentials: HTTPAuthorizationCredentials = Security(HTTPBearer())) -> APIAccessTokenPayload:
     try:
         return jwt.decode(APIAccessTokenPayload, credentials.credentials)
 
@@ -16,7 +16,7 @@ async def get_assess_token(credentials: HTTPAuthorizationCredentials = Security(
 
 
 async def get_current_user(
-        user_factory: UserFactory = Depends(factory), token: APIAccessTokenPayload = Depends(get_assess_token)
+        user_factory: UserFactory = Depends(factory), token: APIAccessTokenPayload = Depends(get_access_token)
 ) -> User:
     return await user_factory.get(ObjectId(token.user_id))
 

@@ -11,15 +11,16 @@ class Email:
         self.__username = username
         self.__password = password
 
-    async def send(self, to: str, content: str) -> None:
+    async def send(self, to: str, content: str, name: str = 'Task Tracker', subject: str = 'Task Tracker') -> None:
         message = EmailMessage()
-        message['From'] = self.__username
+        message['From'] = f'"{name}" <{self.__username}>'
         message['To'] = to
-        message['Subject'] = 'Task Tracker'
-        message.set_content(content)
+        message['Subject'] = subject
+        message.set_content(content, subtype='html')
 
         await aiosmtplib.send(
             message,
+            sender=message['From'],
             hostname=self.__host,
             port=self.__port,
             username=self.__username,
