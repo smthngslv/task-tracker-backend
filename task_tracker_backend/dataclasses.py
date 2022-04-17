@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import Enum
 from typing import Optional
 
 import orjson
@@ -24,11 +25,20 @@ class UserData(BaseModel):
         arbitrary_types_allowed = True
 
 
+class TaskStatus(str, Enum):
+    BACKLOG = 'BACKLOG'
+    TODO = 'TODO'
+    IN_PROGRESS = 'IN_PROGRESS'
+    DONE = 'DONE'
+
+
 class TaskData(BaseModel):
     name: constr(max_length=64)
-    tag: constr(regex=r'^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){1,18}[a-zA-Z0-9]$')
+    tags: Optional[list[constr(regex=r'^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){1,18}[a-zA-Z0-9]$')]]
     deadline: datetime
     description: Optional[constr(max_length=512)]
+    hours_spent: int = 0
+    status: TaskStatus
 
     class Config:
         arbitrary_types_allowed = True

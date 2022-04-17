@@ -30,8 +30,19 @@ async def get_me(user: User = Depends(get_current_user)) -> UserSchema:
 
 @router.post('/new', status_code=status.HTTP_202_ACCEPTED)
 async def create(data: UserRegistration = Body(...)) -> None:
-    token = APIConfirmTokenPayload(email=data.email)
-    await email.send(data.email, content=jwt.encode(token))
+    encoded_token = jwt.encode(APIConfirmTokenPayload(email=data.email))
+    await email.send(
+        data.email,
+        content=f"""<h1>Hello!</h1>
+<p>You requested a registration on the Task Tracker website.</p>
+<p>
+  To proceed, please, follow this link:<br />
+  <a href="https://tasktracker.gq/register/finish?token={encoded_token}">
+    https://tasktracker.gq/register/finish?token={encoded_token}
+  </a>
+</p>
+"""
+    )
 
 
 @router.post('/new/confirm', status_code=status.HTTP_201_CREATED, response_model=APIAccessToken)
@@ -55,7 +66,19 @@ async def confirm_creation(
 async def update(data: UserData = Body(...), user: User = Depends(get_current_user)) -> None:
     old_data = await user.data
     if old_data.email != data.email:
-        await email.send(data.email, jwt.encode(APIConfirmTokenPayload(email=data.email)))
+        encoded_token = jwt.encode(APIConfirmTokenPayload(email=data.email))
+        await email.send(
+            data.email,
+            content=f"""<h1>Hello!</h1>
+<p>You requested to change your email address on the Task Tracker website.</p>
+<p>
+  To proceed, please, follow this link (make sure you are logged in at first):<br />
+  <a href="https://tasktracker.gq/settings/change_email?token={encoded_token}">
+    https://tasktracker.gq/settings/change_email?token={encoded_token}
+  </a>
+</p>
+"""
+    )
         data.email = old_data.email
 
     await user.update_data(data)
@@ -87,8 +110,19 @@ async def change_password(
 @router.post('/password/reset', status_code=status.HTTP_202_ACCEPTED)
 async def reset_password(data: UserResetPassword = Body(...), user_factory: UserFactory = Depends(factory)) -> None:
     await user_factory.get_by_email(data.email)
-    token = APIConfirmTokenPayload(email=data.email)
-    await email.send(data.email, content=jwt.encode(token))
+    encoded_token = jwt.encode(APIConfirmTokenPayload(email=data.email))
+    await email.send(
+        data.email,
+        content=f"""<h1>Hello!</h1>
+<p>You requested to change your password on the Task Tracker website.</p>
+<p>
+  To proceed, please, follow this link:<br />
+  <a href="https://tasktracker.gq/login/restore?token={encoded_token}">
+    https://tasktracker.gq/login/restore?token={encoded_token}
+  </a>
+</p>
+"""
+    )
 
 
 @router.post('/password/reset/confirm', status_code=status.HTTP_200_OK)
