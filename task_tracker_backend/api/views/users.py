@@ -37,8 +37,8 @@ async def create(data: UserRegistration = Body(...)) -> None:
 <p>You requested a registration on the Task Tracker website.</p>
 <p>
   To proceed, please, follow this link:<br />
-  <a href="https://taskmanager.gq/register/finish?token={encoded_token}">
-    https://taskmanager.gq/register/finish?token={encoded_token}
+  <a href="https://tasktracker.gq/register/finish?token={encoded_token}">
+    https://tasktracker.gq/register/finish?token={encoded_token}
   </a>
 </p>
 """
@@ -73,8 +73,8 @@ async def update(data: UserData = Body(...), user: User = Depends(get_current_us
 <p>You requested to change your email address on the Task Tracker website.</p>
 <p>
   To proceed, please, follow this link (make sure you are logged in at first):<br />
-  <a href="https://taskmanager.gq/settings/change_email?token={encoded_token}">
-    https://taskmanager.gq/settings/change_email?token={encoded_token}
+  <a href="https://tasktracker.gq/settings/change_email?token={encoded_token}">
+    https://tasktracker.gq/settings/change_email?token={encoded_token}
   </a>
 </p>
 """
@@ -117,8 +117,8 @@ async def reset_password(data: UserResetPassword = Body(...), user_factory: User
 <p>You requested to change your password on the Task Tracker website.</p>
 <p>
   To proceed, please, follow this link:<br />
-  <a href="https://taskmanager.gq/login/restore?token={encoded_token}">
-    https://taskmanager.gq/login/restore?token={encoded_token}
+  <a href="https://tasktracker.gq/login/restore?token={encoded_token}">
+    https://tasktracker.gq/login/restore?token={encoded_token}
   </a>
 </p>
 """
